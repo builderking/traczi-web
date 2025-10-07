@@ -6,7 +6,10 @@ import components from './components';
 
 export default (server, darkMode, direction) => useMemo(() => createTheme({
   typography: {
-    fontFamily: 'Roboto,Segoe UI,Helvetica Neue,Arial,sans-serif',
+    fontFamily: 'Inter,Roboto,Segoe UI,Helvetica Neue,Arial,sans-serif',
+    fontWeightRegular: 500,
+    fontWeightMedium: 500,
+    fontWeightBold: 600,
   },
   palette: palette(server, darkMode),
   direction,

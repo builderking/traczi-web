@@ -11,9 +11,8 @@ import {
   useTheme,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MenuIcon from '@mui/icons-material/Menu';
+import HugeIcon from './HugeIcon';
+import { ArrowLeft01Icon, ArrowRight01Icon, Menu01Icon } from '@hugeicons-pro/core-duotone-rounded';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from './LocalizationProvider';
 import BackIcon from './BackIcon';
@@ -108,7 +107,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
               </>
             )}
             <IconButton color="inherit" edge="start" sx={{ ml: miniVariant ? -2 : 'auto' }} onClick={toggleDrawer}>
-              {(miniVariant !== (theme.direction === 'rtl')) ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              {(miniVariant !== (theme.direction === 'rtl')) ? <HugeIcon icon={ArrowRight01Icon} /> : <HugeIcon icon={ArrowLeft01Icon} />}
             </IconButton>
           </Toolbar>
           <Divider />
@@ -128,7 +127,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         <AppBar className={classes.mobileToolbar} position="static" color="inherit">
           <Toolbar>
             <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => setOpenDrawer(true)}>
-              <MenuIcon />
+              <HugeIcon icon={Menu01Icon} />
             </IconButton>
             <PageTitle breadcrumbs={breadcrumbs} />
           </Toolbar>

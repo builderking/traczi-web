@@ -1,7 +1,8 @@
 import {
   AppBar, Toolbar, Typography, IconButton,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import HugeIcon from './HugeIcon';
+import { Menu01Icon } from '@hugeicons-pro/core-duotone-rounded';
 
 const Navbar = ({ setOpenDrawer, title }) => (
   <AppBar position="sticky" color="inherit">
@@ -12,7 +13,7 @@ const Navbar = ({ setOpenDrawer, title }) => (
         sx={{ mr: 2 }}
         onClick={() => setOpenDrawer(true)}
       >
-        <MenuIcon />
+        <HugeIcon icon={Menu01Icon} />
       </IconButton>
       <Typography variant="h6" noWrap>
         {title}

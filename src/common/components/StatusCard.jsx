@@ -20,12 +20,16 @@ import {
   Tooltip,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import CloseIcon from '@mui/icons-material/Close';
-import RouteIcon from '@mui/icons-material/Route';
-import SendIcon from '@mui/icons-material/Send';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PendingIcon from '@mui/icons-material/Pending';
+import { alpha } from '@mui/material/styles';
+import HugeIcon from './HugeIcon';
+import {
+  Cancel01Icon,
+  Route01Icon,
+  SendToMobileIcon,
+  Edit01Icon,
+  Delete02Icon,
+  Menu02Icon,
+} from '@hugeicons-pro/core-duotone-rounded';
 
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
@@ -41,6 +45,11 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
   card: {
     pointerEvents: 'auto',
     width: theme.dimensions.popupMaxWidth,
+    borderRadius: 12,
+    backgroundColor: alpha(theme.palette.background.paper, 0.88),
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    boxShadow: '0 16px 34px rgba(0, 0, 0, 0.15)',
   },
   media: {
     height: theme.dimensions.popupImageHeight,
@@ -189,7 +198,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                    <HugeIcon icon={Cancel01Icon} size={18} className={classes.mediaButton} />
                   </IconButton>
                 </CardMedia>
               ) : (
@@ -202,7 +211,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={onClose}
                     onTouchStart={onClose}
                   >
-                    <CloseIcon fontSize="small" />
+                    <HugeIcon icon={Cancel01Icon} size={18} />
                   </IconButton>
                 </div>
               )}
@@ -240,11 +249,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
               <CardActions classes={{ root: classes.actions }} disableSpacing>
                 <Tooltip title={t('sharedExtra')}>
                   <IconButton
-                    color="secondary"
                     onClick={(e) => setAnchorEl(e.currentTarget)}
                     disabled={!position}
                   >
-                    <PendingIcon />
+                    <HugeIcon icon={Menu02Icon} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('reportReplay')}>
@@ -252,7 +260,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={() => navigate(`/replay?deviceId=${deviceId}`)}
                     disabled={disableActions || !position}
                   >
-                    <RouteIcon />
+                    <HugeIcon icon={Route01Icon} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('commandTitle')}>
@@ -260,7 +268,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={() => navigate(`/settings/device/${deviceId}/command`)}
                     disabled={disableActions}
                   >
-                    <SendIcon />
+                    <HugeIcon icon={SendToMobileIcon} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('sharedEdit')}>
@@ -268,7 +276,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={() => navigate(`/settings/device/${deviceId}`)}
                     disabled={disableActions || deviceReadonly}
                   >
-                    <EditIcon />
+                    <HugeIcon icon={Edit01Icon} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('sharedRemove')}>
@@ -277,7 +285,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     onClick={() => setRemoving(true)}
                     disabled={disableActions || deviceReadonly}
                   >
-                    <DeleteIcon />
+                    <HugeIcon icon={Delete02Icon} />
                   </IconButton>
                 </Tooltip>
               </CardActions>

@@ -5,11 +5,14 @@ import {
   Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
 } from '@mui/material';
 
-import DescriptionIcon from '@mui/icons-material/Description';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MapIcon from '@mui/icons-material/Map';
-import PersonIcon from '@mui/icons-material/Person';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HugeIcon from './HugeIcon';
+import {
+  MapsIcon,
+  File01Icon,
+  Settings02Icon,
+  UserIcon,
+  Logout01Icon,
+} from '@hugeicons-pro/core-duotone-rounded';
 
 import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
@@ -105,24 +108,28 @@ const BottomMenu = () => {
 
   return (
     <Paper square elevation={3}>
-      <BottomNavigation value={currentSelection()} onChange={handleSelection} showLabels>
+      <BottomNavigation
+        value={currentSelection()}
+        onChange={handleSelection}
+        showLabels
+        sx={{
+          '& .MuiBottomNavigationAction-label': { mt: '4px' },
+          '& .Mui-selected .MuiBottomNavigationAction-label': { fontWeight: 700 },
+        }}
+      >
         <BottomNavigationAction
           label={t('mapTitle')}
-          icon={(
-            <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
-              <MapIcon />
-            </Badge>
-          )}
+          icon={(<Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}><HugeIcon icon={MapsIcon} /></Badge>)}
           value="map"
         />
         {!disableReports && (
-          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
+          <BottomNavigationAction label={t('reportTitle')} icon={<HugeIcon icon={File01Icon} />} value="reports" />
         )}
-        <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
+        <BottomNavigationAction label={t('settingsTitle')} icon={<HugeIcon icon={Settings02Icon} />} value="settings" />
         {readonly ? (
-          <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
+          <BottomNavigationAction label={t('loginLogout')} icon={<HugeIcon icon={Logout01Icon} />} value="logout" />
         ) : (
-          <BottomNavigationAction label={t('settingsUser')} icon={<PersonIcon />} value="account" />
+          <BottomNavigationAction label={t('settingsUser')} icon={<HugeIcon icon={UserIcon} />} value="account" />
         )}
       </BottomNavigation>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>

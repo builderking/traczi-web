@@ -6,10 +6,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { useTheme } from '@mui/material/styles';
-import MapIcon from '@mui/icons-material/Map';
-import DnsIcon from '@mui/icons-material/Dns';
-import AddIcon from '@mui/icons-material/Add';
-import TuneIcon from '@mui/icons-material/Tune';
+import HugeIcon from '../common/components/HugeIcon';
+import { MapsIcon, ServerStack01Icon, Add01Icon, SlidersHorizontalIcon } from '@hugeicons-pro/core-duotone-rounded';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
@@ -61,7 +59,7 @@ const MainToolbar = ({
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-        {devicesOpen ? <MapIcon /> : <DnsIcon />}
+        {devicesOpen ? <HugeIcon icon={MapsIcon} /> : <HugeIcon icon={ServerStack01Icon} />}
       </IconButton>
       <OutlinedInput
         ref={inputRef}
@@ -74,7 +72,7 @@ const MainToolbar = ({
           <InputAdornment position="end">
             <IconButton size="small" edge="end" onClick={() => setFilterAnchorEl(inputRef.current)}>
               <Badge color="info" variant="dot" invisible={!filter.statuses.length && !filter.groups.length}>
-                <TuneIcon fontSize="small" />
+                <HugeIcon icon={SlidersHorizontalIcon} size={18} />
               </Badge>
             </IconButton>
           </InputAdornment>
@@ -171,7 +169,7 @@ const MainToolbar = ({
       </Popover>
       <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <AddIcon />
+          <HugeIcon icon={Add01Icon} />
         </Tooltip>
       </IconButton>
     </Toolbar>
