@@ -4,6 +4,17 @@ export default {
       noSsr: true,
     },
   },
+  MuiMenu: {
+    styleOverrides: {
+      paper: ({ theme }) => ({
+        borderRadius: 8,
+        boxShadow: '0px 16px 24px rgba(0, 0, 0, 0.11)',
+        backgroundColor: theme.alpha(theme.palette.background.paper, 0.88),
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+      }),
+    },
+  },
   MuiOutlinedInput: {
     styleOverrides: {
       root: ({ theme }) => ({

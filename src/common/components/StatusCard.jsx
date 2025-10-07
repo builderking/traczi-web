@@ -18,6 +18,8 @@ import {
   TableFooter,
   Link,
   Tooltip,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { alpha } from '@mui/material/styles';
@@ -29,6 +31,13 @@ import {
   Edit01Icon,
   Delete02Icon,
   Menu02Icon,
+  DeviceAccessIcon,
+  DrawingModeIcon,
+  GoogleMapsIcon,
+  AppleIcon,
+  MapPinpoint01Icon,
+  Navigation01Icon,
+  ShareLocation01Icon,
 } from '@hugeicons-pro/core-duotone-rounded';
 
 import { useTranslation } from './LocalizationProvider';
@@ -203,7 +212,8 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 </CardMedia>
               ) : (
                 <div className={`${classes.header} draggable-header`}>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <HugeIcon icon={DeviceAccessIcon} size={16} />
                     {device.name}
                   </Typography>
                   <IconButton
@@ -295,13 +305,35 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       </div>
       {position && (
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-          {!readonly && <MenuItem onClick={handleGeofence}>{t('sharedCreateGeofence')}</MenuItem>}
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}>{t('linkGoogleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}>{t('linkAppleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>{t('linkStreetView')}</MenuItem>
-          {navigationAppTitle && <MenuItem component="a" target="_blank" href={navigationAppLink.replace('{latitude}', position.latitude).replace('{longitude}', position.longitude)}>{navigationAppTitle}</MenuItem>}
+          {!readonly && (
+            <MenuItem onClick={handleGeofence}>
+              <ListItemIcon><HugeIcon icon={DrawingModeIcon} size={18} /></ListItemIcon>
+              <ListItemText primary={t('sharedCreateGeofence')} />
+            </MenuItem>
+          )}
+          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}>
+            <ListItemIcon><HugeIcon icon={GoogleMapsIcon} size={18} /></ListItemIcon>
+            <ListItemText primary={t('linkGoogleMaps')} />
+          </MenuItem>
+          <MenuItem component="a" target="_blank" href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}>
+            <ListItemIcon><HugeIcon icon={AppleIcon} size={18} /></ListItemIcon>
+            <ListItemText primary={t('linkAppleMaps')} />
+          </MenuItem>
+          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>
+            <ListItemIcon><HugeIcon icon={MapPinpoint01Icon} size={18} /></ListItemIcon>
+            <ListItemText primary={t('linkStreetView')} />
+          </MenuItem>
+          {navigationAppTitle && (
+            <MenuItem component="a" target="_blank" href={navigationAppLink.replace('{latitude}', position.latitude).replace('{longitude}', position.longitude)}>
+              <ListItemIcon><HugeIcon icon={Navigation01Icon} size={18} /></ListItemIcon>
+              <ListItemText primary={navigationAppTitle} />
+            </MenuItem>
+          )}
           {!shareDisabled && !user.temporary && (
-            <MenuItem onClick={() => navigate(`/settings/device/${deviceId}/share`)}><Typography color="secondary">{t('deviceShare')}</Typography></MenuItem>
+            <MenuItem onClick={() => navigate(`/settings/device/${deviceId}/share`)}>
+              <ListItemIcon><HugeIcon icon={ShareLocation01Icon} size={18} /></ListItemIcon>
+              <ListItemText primaryTypographyProps={{ color: 'secondary' }} primary={t('deviceShare')} />
+            </MenuItem>
           )}
         </Menu>
       )}
