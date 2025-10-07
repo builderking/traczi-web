@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useEffect, useMemo,
+  createContext, useContext, useEffect, useMemo, useCallback,
 } from 'react';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -158,27 +158,48 @@ export const LocalizationProvider = ({ children }) => {
     return (targetLanguage && targetLanguage in languages) ? targetLanguage : null;
   });
 
+  const allowed = useSelector((state) => state.session.server?.attributes?.['ui.allowedLanguages']);
+
   const [localLanguage, setLocalLanguage] = usePersistedState('language', getDefaultLanguage());
 
   const language = remoteLanguage || localLanguage;
 
-  const direction = /^(ar|he|fa)$/.test(language) ? 'rtl' : 'ltr';
+  const allowedSet = useMemo(() => new Set((allowed || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)), [allowed]);
+
+  const filteredLanguages = useMemo(() => (allowedSet.size
+    ? Object.fromEntries(Object.entries(languages).filter(([code]) => allowedSet.has(code)))
+    : languages), [allowedSet]);
+
+  const safeLanguage = useMemo(() => (filteredLanguages[language]
+    ? language
+    : (Object.keys(filteredLanguages)[0] || 'en')), [filteredLanguages, language]);
+
+  const direction = /^(ar|he|fa)$/.test(safeLanguage) ? 'rtl' : 'ltr';
+
+  const setLocalLanguageSafe = useCallback((code) => {
+    if (filteredLanguages[code]) {
+      setLocalLanguage(code);
+    }
+  }, [filteredLanguages, setLocalLanguage]);
 
   const value = useMemo(
-    () => ({ languages, language, setLocalLanguage, direction }),
-    [languages, language, setLocalLanguage, direction],
+    () => ({ languages: filteredLanguages, language: safeLanguage, setLocalLanguage: setLocalLanguageSafe, direction }),
+    [filteredLanguages, safeLanguage, setLocalLanguageSafe, direction],
   );
 
   useEffect(() => {
     let selected;
-    if (language.length > 2) {
-      selected = `${language.slice(0, 2)}-${language.slice(-2).toLowerCase()}`;
+    if (safeLanguage.length > 2) {
+      selected = `${safeLanguage.slice(0, 2)}-${safeLanguage.slice(-2).toLowerCase()}`;
     } else {
-      selected = language;
+      selected = safeLanguage;
     }
     dayjs.locale(selected);
     document.dir = direction;
-  }, [language, direction]);
+  }, [safeLanguage, direction]);
 
   return (
     <LocalizationContext.Provider value={value}>

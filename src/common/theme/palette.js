@@ -5,7 +5,7 @@ const validatedColor = (color) => (/^#([0-9A-Fa-f]{3}){1,2}$/.test(color) ? colo
 export default (server, darkMode) => ({
   mode: darkMode ? 'dark' : 'light',
   background: {
-    default: darkMode ? grey[900] : grey[50],
+    default: darkMode ? grey[900] : '#ffffff',
   },
   primary: {
     main: validatedColor(server?.attributes?.colorPrimary) || (darkMode ? deepPurple[200] : deepPurple[900]),

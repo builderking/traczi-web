@@ -1,4 +1,5 @@
 import { HugeiconsIcon } from '@hugeicons/react';
+// Reusable Hugeicons wrapper; defaults align with our design system
 
 const HugeIcon = ({ icon, size = 20, color = 'currentColor', strokeWidth = 1.5, primaryColor, secondaryColor, disableSecondaryOpacity = false, ...rest }) => (
   <HugeiconsIcon
