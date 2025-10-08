@@ -14,7 +14,10 @@ const useStyles = makeStyles()((theme) => ({
   },
   listInner: {
     position: 'relative',
-    margin: theme.spacing(1.5, 0),
+    margin: theme.spacing(1.5, 1),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
   },
 }));
 
@@ -39,9 +42,12 @@ const DeviceList = ({ devices }) => {
   return (
     <List
       className={classes.list}
+      innerElementType={({ style, ...rest }) => (
+        <div style={{ ...style, padding: 0 }} className={classes.listInner} {...rest} />
+      )}
       rowComponent={DeviceRow}
       rowCount={devices.length}
-      rowHeight={72}
+      rowHeight={60}
       rowProps={{ devices }}
       overscanCount={5}
     />

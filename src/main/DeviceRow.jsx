@@ -31,6 +31,11 @@ const useStyles = makeStyles()((theme) => ({
     height: '25px',
     filter: 'brightness(0) invert(1)',
   },
+  avatar: {
+    width: '36px',
+    height: '36px',
+    borderRadius: '6px',
+  },
   batteryText: {
     fontSize: '0.75rem',
     fontWeight: 'normal',
@@ -90,9 +95,10 @@ const DeviceRow = ({ devices, index, style }) => {
         disabled={!admin && item.disabled}
         selected={selectedDeviceId === item.id}
         className={selectedDeviceId === item.id ? classes.selected : null}
+        sx={{ px: 1, mx: 1, borderRadius: '8px', py: 0.75, maxHeight: 56, mb: '5px' }}
       >
         <ListItemAvatar>
-          <Avatar>
+          <Avatar className={classes.avatar} sx={{ bgcolor: item.status === 'online' ? 'success.main' : 'action.selected' }}>
             <img className={classes.icon} src={mapIcons[mapIconKey(item.category)]} alt="" />
           </Avatar>
         </ListItemAvatar>
@@ -131,19 +137,24 @@ const DeviceRow = ({ devices, index, style }) => {
             {position.attributes.hasOwnProperty('batteryLevel') && (
               <Tooltip title={`${t('positionBatteryLevel')}: ${formatPercentage(position.attributes.batteryLevel)}`}>
                 <IconButton size="small">
-                  {(position.attributes.batteryLevel > 70 && (
-                    position.attributes.charge
-                      ? (<BatteryChargingFullIcon fontSize="small" className={classes.success} />)
-                      : (<BatteryFullIcon fontSize="small" className={classes.success} />)
-                  )) || (position.attributes.batteryLevel > 30 && (
-                    position.attributes.charge
-                      ? (<BatteryCharging60Icon fontSize="small" className={classes.warning} />)
-                      : (<Battery60Icon fontSize="small" className={classes.warning} />)
-                  )) || (
-                    position.attributes.charge
-                      ? (<BatteryCharging20Icon fontSize="small" className={classes.error} />)
-                      : (<Battery20Icon fontSize="small" className={classes.error} />)
-                  )}
+                  {(() => {
+                    const neutral = item.status !== 'online';
+                    const level = position.attributes.batteryLevel;
+                    const charging = !!position.attributes.charge;
+                    if (level > 70) {
+                      return charging
+                        ? (<BatteryChargingFullIcon fontSize="small" className={neutral ? classes.neutral : classes.success} />)
+                        : (<BatteryFullIcon fontSize="small" className={neutral ? classes.neutral : classes.success} />);
+                    }
+                    if (level > 30) {
+                      return charging
+                        ? (<BatteryCharging60Icon fontSize="small" className={neutral ? classes.neutral : classes.warning} />)
+                        : (<Battery60Icon fontSize="small" className={neutral ? classes.neutral : classes.warning} />);
+                    }
+                    return charging
+                      ? (<BatteryCharging20Icon fontSize="small" className={neutral ? classes.neutral : classes.error} />)
+                      : (<Battery20Icon fontSize="small" className={neutral ? classes.neutral : classes.error} />);
+                  })()}
                 </IconButton>
               </Tooltip>
             )}

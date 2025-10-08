@@ -56,6 +56,8 @@ const MainToolbar = ({
 
   const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
 
+  const addDeviceText = t('deviceAdd') || `${t('sharedAdd')} ${t('sharedDevice')}` || t('sharedAdd');
+
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
@@ -167,11 +169,15 @@ const MainToolbar = ({
           </FormGroup>
         </div>
       </Popover>
-      <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
-        <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <HugeIcon icon={Add01Icon} />
-        </Tooltip>
-      </IconButton>
+      <Tooltip title={addDeviceText} placement="bottom" arrow>
+        <span>
+          <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
+            <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
+              <HugeIcon icon={Add01Icon} />
+            </Tooltip>
+          </IconButton>
+        </span>
+      </Tooltip>
     </Toolbar>
   );
 };

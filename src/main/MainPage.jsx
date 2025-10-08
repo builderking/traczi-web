@@ -112,7 +112,15 @@ const MainPage = () => {
         />
       )}
       <div className={classes.sidebar}>
-        <Paper square elevation={3} className={classes.header}>
+        <Paper
+          variant="glass"
+          elevation={0}
+          className={classes.header}
+          style={{
+            boxShadow: devicesOpen ? '0 -8px 24px rgba(0, 0, 0, 0.15)' : '0 8px 24px rgba(0, 0, 0, 0.15)',
+            borderRadius: desktop ? (devicesOpen ? '12px 12px 0 0' : '12px') : 0,
+          }}
+        >
           <MainToolbar
             filteredDevices={filteredDevices}
             devicesOpen={devicesOpen}
@@ -137,13 +145,19 @@ const MainPage = () => {
               />
             </div>
           )}
-          <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
+          <Paper
+            square
+            variant="glass"
+            elevation={0}
+            className={classes.contentList}
+            style={devicesOpen ? {} : { visibility: 'hidden' }}
+          >
             <DeviceList devices={filteredDevices} />
           </Paper>
         </div>
         {desktop && (
           <div className={classes.footer}>
-            <BottomMenu />
+            <BottomMenu desktop panelOpen={devicesOpen} />
           </div>
         )}
       </div>

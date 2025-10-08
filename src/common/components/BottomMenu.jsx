@@ -19,7 +19,7 @@ import { useTranslation } from './LocalizationProvider';
 import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
 
-const BottomMenu = () => {
+const BottomMenu = ({ desktop = false, panelOpen = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -106,8 +106,19 @@ const BottomMenu = () => {
     }
   };
 
+  const radius = desktop ? (panelOpen ? '0 0 12px 12px' : '12px') : 0;
+
   return (
-    <Paper square elevation={3}>
+    <Paper
+      square={false}
+      variant="glass"
+      elevation={0}
+      sx={{
+        borderRadius: radius,
+        overflow: 'hidden',
+        boxShadow: panelOpen ? '0 8px 24px rgba(0, 0, 0, 0.15)' : '0 -8px 24px rgba(0, 0, 0, 0.15)',
+      }}
+    >
       <BottomNavigation
         value={currentSelection()}
         onChange={handleSelection}
