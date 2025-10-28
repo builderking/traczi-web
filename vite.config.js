@@ -8,8 +8,8 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': 'wss://api.traczi.com',
-      '/api': 'https://api.traczi.com',
+      '/api/socket': 'ws://35.192.15.228:8082',
+      '/api': 'http://35.192.15.228:8082',
     },
   },
   build: {
