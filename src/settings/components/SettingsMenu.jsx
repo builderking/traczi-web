@@ -17,6 +17,7 @@ import {
   ServerStack01Icon,
   HelpCircleIcon,
   Payment01Icon,
+  CreditCardIcon,
   Megaphone01Icon,
   CalculateIcon,
 } from '@hugeicons-pro/core-duotone-rounded';
@@ -64,6 +65,12 @@ const SettingsMenu = () => {
               link={`/settings/user/${userId}`}
               icon={<HugeIcon icon={UserIcon} />}
               selected={location.pathname === `/settings/user/${userId}`}
+            />
+            <MenuItem
+              title="Subscription"
+              link="/settings/subscription"
+              icon={<HugeIcon icon={CreditCardIcon} />}
+              selected={location.pathname === '/settings/subscription'}
             />
             <MenuItem
               title={t('deviceTitle')}

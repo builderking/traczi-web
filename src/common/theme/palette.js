@@ -8,7 +8,7 @@ export default (server, darkMode) => ({
     default: darkMode ? grey[900] : '#ffffff',
   },
   primary: {
-    main: validatedColor(server?.attributes?.colorPrimary) || (darkMode ? deepPurple[200] : deepPurple[900]),
+    main: validatedColor(server?.attributes?.colorPrimary) || '#b6a0dc',
   },
   secondary: {
     main: validatedColor(server?.attributes?.colorSecondary) || (darkMode ? green[200] : green[800]),

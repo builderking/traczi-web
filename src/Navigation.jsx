@@ -35,6 +35,7 @@ import CommandPage from './settings/CommandPage';
 import StatisticsPage from './reports/StatisticsPage';
 import LoginPage from './login/LoginPage';
 import RegisterPage from './login/RegisterPage';
+import RegistrationSuccessPage from './login/RegistrationSuccessPage';
 import ResetPasswordPage from './login/ResetPasswordPage';
 import GeofencesPage from './other/GeofencesPage';
 import GeofencePage from './settings/GeofencePage';
@@ -54,6 +55,7 @@ import GroupConnectionsPage from './settings/GroupConnectionsPage';
 import UserConnectionsPage from './settings/UserConnectionsPage';
 import LogsPage from './reports/LogsPage';
 import SharePage from './settings/SharePage';
+import SubscriptionPage from './settings/SubscriptionPage';
 import AnnouncementPage from './settings/AnnouncementPage';
 import EmulatorPage from './other/EmulatorPage';
 import Loader from './common/components/Loader';
@@ -114,6 +116,7 @@ const Navigation = () => {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/registration-success" element={<RegistrationSuccessPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/change-server" element={<ChangeServerPage />} />
       <Route path="/" element={<App />}>
@@ -161,6 +164,7 @@ const Navigation = () => {
           <Route path="notification/:id" element={<NotificationPage />} />
           <Route path="notification" element={<NotificationPage />} />
           <Route path="preferences" element={<PreferencesPage />} />
+          <Route path="subscription" element={<SubscriptionPage />} />
           <Route path="server" element={<ServerPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="user/:id/connections" element={<UserConnectionsPage />} />

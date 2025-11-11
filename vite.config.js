@@ -4,16 +4,24 @@ import svgr from 'vite-plugin-svgr';
 import { VitePWA } from 'vite-plugin-pwa';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-export default defineConfig(() => ({
+export default defineConfig(({ mode }) => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': 'ws://35.192.15.228:8082',
-      '/api': 'http://35.192.15.228:8082',
+      '/api/socket': 'wss://api.traczi.com',
+      '/api': 'https://api.traczi.com',
     },
   },
   build: {
     outDir: 'build',
+  },
+  // Define global constants that will be replaced during build
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify(
+      mode === 'production'
+        ? 'https://api.traczi.com'
+        : 'http://localhost:8082'
+    ),
   },
   plugins: [
     svgr(),
@@ -26,9 +34,9 @@ export default defineConfig(() => ({
         globPatterns: ['**/*.{js,css,html,woff,woff2,mp3}'],
       },
       manifest: {
-        short_name: '${title}',
-        name: '${description}',
-        theme_color: '${colorPrimary}',
+        short_name: 'Traczi',
+        name: 'Traczi',
+        theme_color: '#b6a0dc',
         icons: [
           {
             src: 'pwa-64x64.png',

@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
-  Container, Button, Accordion, AccordionDetails, AccordionSummary, Skeleton, Typography, TextField,
+  Container, Button, Accordion, AccordionDetails, AccordionSummary, Skeleton, Typography, TextField, Alert,
 } from '@mui/material';
+import { useState } from 'react';
 import { useCatch, useEffectAsync } from '../../reactHelper';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import PageLayout from '../../common/components/PageLayout';
@@ -16,6 +18,8 @@ const EditItemView = ({
   const t = useTranslation();
 
   const { id } = useParams();
+  const user = useSelector((state) => state.session.user);
+  const [limitError, setLimitError] = useState(null);
 
   useEffectAsync(async () => {
     if (!item) {
@@ -29,6 +33,28 @@ const EditItemView = ({
   }, [id, item, defaultItem]);
 
   const handleSave = useCatch(async () => {
+    setLimitError(null);
+
+    // Check device limit for new devices only
+    if (endpoint === 'devices' && !id) {
+      const deviceLimit = user.deviceLimit;
+
+      // -1 means unlimited
+      if (deviceLimit !== -1) {
+        // Get current device count
+        const devicesResponse = await fetchOrThrow('/api/devices');
+        const devices = await devicesResponse.json();
+        const currentCount = devices.length;
+
+        if (currentCount >= deviceLimit) {
+          setLimitError(
+            `You have reached your device limit (${deviceLimit} devices). Please upgrade your subscription plan to add more devices.`
+          );
+          return;
+        }
+      }
+    }
+
     let url = `/api/${endpoint}`;
     if (id) {
       url += `/${id}`;
@@ -49,6 +75,11 @@ const EditItemView = ({
   return (
     <PageLayout menu={menu} breadcrumbs={breadcrumbs}>
       <Container maxWidth="xs" className={classes.container}>
+        {limitError && (
+          <Alert severity="error" onClose={() => setLimitError(null)} sx={{ mb: 2 }}>
+            {limitError}
+          </Alert>
+        )}
         {item ? children : (
           <Accordion defaultExpanded>
             <AccordionSummary>
