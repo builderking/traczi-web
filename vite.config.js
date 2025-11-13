@@ -31,7 +31,7 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         navigateFallbackDenylist: [/^\/api/],
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        globPatterns: ['**/*.{js,css,html,woff,woff2,mp3}'],
+        globPatterns: ['**/*.js', '**/*.css', '**/*.html', '**/*.woff', '**/*.woff2', '**/*.mp3'],
       },
       manifest: {
         short_name: 'Traczi',
