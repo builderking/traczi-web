@@ -180,7 +180,10 @@ async function handleSubscriptionCreated(subscription) {
   // Enable user account
   await traccarClient.setUserStatus(user.id, false);
 
-  logger.info(`Subscription activated for user ${user.id} - Plan: ${plan.name}`);
+  // Re-enable any previously disabled devices
+  await traccarClient.enableUserDevices(user.id);
+
+  logger.info(`Subscription activated for user ${user.id} - Plan: ${plan.name}, devices re-enabled`);
 }
 
 /**
@@ -222,6 +225,8 @@ async function handleSubscriptionUpdated(subscription) {
     // Optionally disable account after grace period
   } else if (status === 'active') {
     await traccarClient.setUserStatus(user.id, false);
+    // Re-enable any previously disabled devices when subscription becomes active again
+    await traccarClient.enableUserDevices(user.id);
   }
 
   logger.info(`Subscription updated for user ${user.id} - Status: ${status}`);
@@ -247,6 +252,9 @@ async function handleSubscriptionDeleted(subscription) {
     return;
   }
 
+  // Disable all user devices (but don't delete them)
+  await traccarClient.disableUserDevices(user.id);
+
   // Disable user account
   await traccarClient.setUserStatus(user.id, true);
 
@@ -255,7 +263,7 @@ async function handleSubscriptionDeleted(subscription) {
     subscriptionStatus: 'canceled',
   });
 
-  logger.info(`Subscription canceled for user ${user.id}`);
+  logger.info(`Subscription canceled for user ${user.id} - devices disabled but preserved`);
 }
 
 /**
@@ -312,7 +320,10 @@ async function handlePaymentSucceeded(invoice) {
   // Ensure account is enabled
   await traccarClient.setUserStatus(user.id, false);
 
-  logger.info(`Payment confirmed for user ${user.id}`);
+  // Re-enable any previously disabled devices
+  await traccarClient.enableUserDevices(user.id);
+
+  logger.info(`Payment confirmed for user ${user.id}, devices re-enabled`);
 }
 
 /**

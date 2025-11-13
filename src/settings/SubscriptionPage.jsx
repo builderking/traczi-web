@@ -31,6 +31,7 @@ import { useTranslation } from '../common/components/LocalizationProvider';
 import { useEffectAsync } from '../reactHelper';
 import SettingsMenu from './components/SettingsMenu';
 import PlanUpgradeDialog from './components/PlanUpgradeDialogV2';
+import PlanSelection from '../components/billing/PlanSelection';
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -175,6 +176,7 @@ const SubscriptionPage = () => {
   const [deviceCount, setDeviceCount] = useState(0);
   const [processingPortal, setProcessingPortal] = useState(false);
   const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffectAsync(async () => {
     try {
@@ -284,6 +286,49 @@ const SubscriptionPage = () => {
     return (deviceCount / user.deviceLimit) * 100;
   };
 
+  const handlePlanSelect = async (plan) => {
+    setSelectedPlan(plan);
+
+    try {
+      setError(null);
+
+      // Create checkout session for the selected plan
+      const billingApiUrl = import.meta.env.VITE_BILLING_API_URL || 'https://traczi-billing.onrender.com';
+      const response = await fetch(`${billingApiUrl}/billing/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planId: plan.id,
+          email: user.email,
+          metadata: {
+            userName: user.name,
+            userEmail: user.email,
+            planId: plan.id,
+            deviceLimit: plan.deviceLimit,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.sessionUrl) {
+        // Redirect to Stripe checkout
+        window.location.href = data.sessionUrl;
+      } else {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+    } catch (err) {
+      console.error('Error creating checkout:', err);
+      setError('Unable to start checkout process. Please try again.');
+    }
+  };
+
+  const isSubscriptionCancelledOrExpired = () => {
+    if (!subscription?.subscriptionId) return true;
+    const status = subscription?.status?.toLowerCase();
+    return status === 'canceled' || status === 'incomplete_expired';
+  };
+
   if (loading) {
     return (
       <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'subscription']}>
@@ -312,10 +357,18 @@ const SubscriptionPage = () => {
           </Alert>
         )}
 
-        {!subscription?.subscriptionId ? (
-          <Alert severity="warning" sx={{ borderRadius: 2 }}>
-            No active subscription found. Please contact support if you believe this is an error.
-          </Alert>
+        {isSubscriptionCancelledOrExpired() ? (
+          <>
+            <Alert severity="info" sx={{ mb: 3, borderRadius: 2 }}>
+              {!subscription?.subscriptionId
+                ? 'No active subscription found. Choose a plan below to get started.'
+                : 'Your subscription has been cancelled. Re-subscribe below to restore access to your devices and continue tracking.'}
+            </Alert>
+            <PlanSelection
+              selectedPlan={selectedPlan}
+              onPlanSelect={handlePlanSelect}
+            />
+          </>
         ) : (
           <>
             <Grid container spacing={3}>

@@ -331,6 +331,86 @@ class TraccarClient {
       throw error;
     }
   }
+
+  /**
+   * Disable all devices for a user
+   */
+  async disableUserDevices(userId) {
+    try {
+      logger.info(`Disabling all devices for user ${userId}`);
+
+      // Get all devices
+      const devices = await this.request('/api/devices');
+
+      // Filter devices that belong to this user
+      const userDevices = devices.filter(device => device.userId === userId);
+
+      logger.info(`Found ${userDevices.length} devices for user ${userId}`);
+
+      // Disable each device
+      for (const device of userDevices) {
+        if (!device.disabled) {
+          const updatedDevice = {
+            ...device,
+            disabled: true,
+          };
+
+          await this.request(`/api/devices/${device.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(updatedDevice),
+          });
+
+          logger.info(`Disabled device ${device.id} (${device.name})`);
+        }
+      }
+
+      logger.info(`Successfully disabled ${userDevices.length} devices for user ${userId}`);
+      return userDevices.length;
+    } catch (error) {
+      logger.error(`Failed to disable devices for user ${userId}`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Enable all devices for a user (re-enable previously disabled devices)
+   */
+  async enableUserDevices(userId) {
+    try {
+      logger.info(`Enabling all devices for user ${userId}`);
+
+      // Get all devices
+      const devices = await this.request('/api/devices');
+
+      // Filter devices that belong to this user
+      const userDevices = devices.filter(device => device.userId === userId);
+
+      logger.info(`Found ${userDevices.length} devices for user ${userId}`);
+
+      // Enable each device
+      for (const device of userDevices) {
+        if (device.disabled) {
+          const updatedDevice = {
+            ...device,
+            disabled: false,
+          };
+
+          await this.request(`/api/devices/${device.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(updatedDevice),
+          });
+
+          logger.info(`Enabled device ${device.id} (${device.name})`);
+        }
+      }
+
+      logger.info(`Successfully enabled ${userDevices.length} devices for user ${userId}`);
+      return userDevices.length;
+    } catch (error) {
+      logger.error(`Failed to enable devices for user ${userId}`, error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance
